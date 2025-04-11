@@ -1,0 +1,36 @@
+/ {
+    aliases {
+        co2 = &scd41;
+    };
+};
+
+&pinctrl {
+    i2c21_default: i2c21_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 1, 12)>, <NRF_PSEL(TWIM_SCL, 1, 11)>;
+            bias-pull-up;
+        };
+    };
+
+    i2c21_sleep: i2c21_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 1, 12)>, <NRF_PSEL(TWIM_SCL, 1, 11)>;
+            low-power-enable;
+        };
+    };
+};
+
+&i2c21 {
+    compatible = "nordic,nrf-twim";
+    status = "okay";
+    pinctrl-0 = <&i2c21_default>;
+    pinctrl-1 = <&i2c21_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    scd41: scd41@62 {
+        compatible = "sensirion,scd41";
+        status = "okay";
+        reg = <0x62>;
+        mode = <2>;
+    };
+};
